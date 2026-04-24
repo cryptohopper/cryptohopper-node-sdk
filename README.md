@@ -1,8 +1,14 @@
 # @cryptohopper/sdk
 
+[![npm](https://img.shields.io/npm/v/@cryptohopper/sdk?include_prereleases&logo=npm)](https://www.npmjs.com/package/@cryptohopper/sdk)
+[![npm downloads](https://img.shields.io/npm/dm/@cryptohopper/sdk?logo=npm&label=downloads)](https://www.npmjs.com/package/@cryptohopper/sdk)
+[![Node](https://img.shields.io/node/v/@cryptohopper/sdk?logo=nodedotjs)](./package.json)
+[![CI](https://github.com/cryptohopper/cryptohopper-node-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/cryptohopper/cryptohopper-node-sdk/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/github/license/cryptohopper/cryptohopper-node-sdk?color=blue)](LICENSE)
+
 Official Node.js SDK for the [Cryptohopper](https://www.cryptohopper.com) API.
 
-> **Status: 0.1.0-alpha.1** — early access. Covers 6 core domains: `user`, `hoppers`, `exchange`, `strategy`, `backtest`, `market`. Additional domains (signals, arbitrage, tournaments, marketmaker, social, ai, template, subscription, platform) expand in subsequent alphas.
+> **Status: 0.4.0-alpha.1** — full coverage of all 18 public API domains: `user`, `hoppers`, `exchange`, `strategy`, `backtest`, `market`, `signals`, `arbitrage`, `marketmaker`, `template`, `ai`, `platform`, `chart`, `subscription`, `social`, `tournaments`, `webhooks`, `app`.
 
 ## Install
 
