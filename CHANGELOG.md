@@ -3,7 +3,17 @@
 All notable changes to `@cryptohopper/sdk` are documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## 0.2.0-alpha.1 — Unreleased
+## 0.3.0-alpha.1 — Unreleased
+
+Adds four more API domains: `ai`, `platform`, `chart`, `subscription`.
+
+### Added
+- **`ai`** — `list`, `get`, `availableModels`, `getCredits`, `creditInvoices`, `creditTransactions`, `buyCredits`, `llmAnalyzeOptions`, `llmAnalyze`, `llmAnalyzeResults`, `llmResults`.
+- **`platform`** — `latestBlog`, `documentation`, `promoBar`, `searchDocumentation`, `countries`, `countryAllowlist`, `ipCountry`, `languages`, `botTypes` (all public).
+- **`chart`** — `list`, `get`, `save`, `delete`, `shareSave`, `shareGet`.
+- **`subscription`** — `hopper`, `get`, `plans`, `remap`, `assign`, `getCredits`, `orderSub`, `stopSubscription`.
+
+## 0.2.0-alpha.1 — 2026-04-24
 
 Adds four more API domains: `signals`, `arbitrage`, `marketmaker`, `template`. Client surface unchanged.
 
