@@ -6,6 +6,10 @@ import { Exchange } from "./resources/exchange.js";
 import { Strategies } from "./resources/strategy.js";
 import { Backtests } from "./resources/backtest.js";
 import { Market } from "./resources/market.js";
+import { Signals } from "./resources/signals.js";
+import { Arbitrage } from "./resources/arbitrage.js";
+import { MarketMaker } from "./resources/marketmaker.js";
+import { Templates } from "./resources/template.js";
 
 const DEFAULT_BASE_URL = "https://api.cryptohopper.com/v1";
 const DEFAULT_TIMEOUT_MS = 30_000;
@@ -64,6 +68,10 @@ export class CryptohopperClient {
   readonly strategy: Strategies;
   readonly backtest: Backtests;
   readonly market: Market;
+  readonly signals: Signals;
+  readonly arbitrage: Arbitrage;
+  readonly marketmaker: MarketMaker;
+  readonly template: Templates;
 
   constructor(opts: CryptohopperClientOptions) {
     if (!opts?.apiKey) {
@@ -83,6 +91,10 @@ export class CryptohopperClient {
     this.strategy = new Strategies(this);
     this.backtest = new Backtests(this);
     this.market = new Market(this);
+    this.signals = new Signals(this);
+    this.arbitrage = new Arbitrage(this);
+    this.marketmaker = new MarketMaker(this);
+    this.template = new Templates(this);
   }
 
   async __request<T = unknown>(

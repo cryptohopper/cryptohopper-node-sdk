@@ -26,3 +26,4 @@ export type {
 export type { Strategy } from "./resources/strategy.js";
 export type { Backtest, BacktestLimits } from "./resources/backtest.js";
 export type { MarketItem, MarketSignal } from "./resources/market.js";
+export type { Template } from "./resources/template.js";

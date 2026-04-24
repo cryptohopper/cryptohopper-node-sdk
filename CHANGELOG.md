@@ -3,7 +3,17 @@
 All notable changes to `@cryptohopper/sdk` are documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## 0.1.0-alpha.1 — Unreleased
+## 0.2.0-alpha.1 — Unreleased
+
+Adds four more API domains: `signals`, `arbitrage`, `marketmaker`, `template`. Client surface unchanged.
+
+### Added
+- **`signals`** — `list`, `performance`, `stats`, `distribution`, `chartData` (signal-provider analytics; distinct from the marketplace-browse `market.signals`).
+- **`arbitrage`** — `exchangeStart`, `exchangeCancel`, `exchangeResults`, `exchangeHistory`, `exchangeTotal`, `exchangeResetTotal`, `marketStart`, `marketCancel`, `marketResult`, `marketHistory`, `backlogs`, `backlog`, `deleteBacklog`.
+- **`marketmaker`** — `get`, `cancel`, `history`, `getMarketTrend`, `setMarketTrend`, `deleteMarketTrend`, `backlogs`, `backlog`, `deleteBacklog`.
+- **`template`** — `list`, `get`, `basic`, `save`, `update`, `load`, `delete`.
+
+## 0.1.0-alpha.1 — 2026-04-24
 
 Initial release. Covers six core API domains.
 
