@@ -1,6 +1,6 @@
 {
   "name": "@cryptohopper/sdk",
-  "version": "0.1.0-alpha.1",
+  "version": "0.2.0-alpha.1",
   "description": "Official Node.js SDK for the Cryptohopper API",
   "type": "module",
   "main": "./dist/index.js",
