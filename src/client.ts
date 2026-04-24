@@ -14,6 +14,10 @@ import { AI } from "./resources/ai.js";
 import { Platform } from "./resources/platform.js";
 import { Chart } from "./resources/chart.js";
 import { Subscription } from "./resources/subscription.js";
+import { Social } from "./resources/social.js";
+import { Tournaments } from "./resources/tournaments.js";
+import { Webhooks } from "./resources/webhooks.js";
+import { App } from "./resources/app.js";
 
 const DEFAULT_BASE_URL = "https://api.cryptohopper.com/v1";
 const DEFAULT_TIMEOUT_MS = 30_000;
@@ -80,6 +84,10 @@ export class CryptohopperClient {
   readonly platform: Platform;
   readonly chart: Chart;
   readonly subscription: Subscription;
+  readonly social: Social;
+  readonly tournaments: Tournaments;
+  readonly webhooks: Webhooks;
+  readonly app: App;
 
   constructor(opts: CryptohopperClientOptions) {
     if (!opts?.apiKey) {
@@ -107,6 +115,10 @@ export class CryptohopperClient {
     this.platform = new Platform(this);
     this.chart = new Chart(this);
     this.subscription = new Subscription(this);
+    this.social = new Social(this);
+    this.tournaments = new Tournaments(this);
+    this.webhooks = new Webhooks(this);
+    this.app = new App(this);
   }
 
   async __request<T = unknown>(
