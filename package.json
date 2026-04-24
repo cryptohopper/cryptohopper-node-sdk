@@ -30,7 +30,7 @@
   "bugs": "https://github.com/cryptohopper/cryptohopper-node-sdk/issues",
   "engines": { "node": ">=20" },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^25",
     "tsup": "^8",
     "typescript": "^6.0.3",
     "vitest": "^2"
