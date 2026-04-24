@@ -8,3 +8,21 @@ export type {
 export { CURRENT_VERSION } from "./version.js";
 
 export type { UserProfile } from "./resources/user.js";
+export type {
+  Hopper,
+  HopperPosition,
+  HopperOrder,
+  HoppersListParams,
+  BuySellInput,
+} from "./resources/hoppers.js";
+export type {
+  Ticker,
+  Candle,
+  Orderbook,
+  TickerParams,
+  CandleParams,
+  OrderbookParams,
+} from "./resources/exchange.js";
+export type { Strategy } from "./resources/strategy.js";
+export type { Backtest, BacktestLimits } from "./resources/backtest.js";
+export type { MarketItem, MarketSignal } from "./resources/market.js";

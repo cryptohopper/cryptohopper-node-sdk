@@ -1,6 +1,11 @@
 import { CryptohopperError } from "./errors.js";
 import { CURRENT_VERSION } from "./version.js";
 import { User } from "./resources/user.js";
+import { Hoppers } from "./resources/hoppers.js";
+import { Exchange } from "./resources/exchange.js";
+import { Strategies } from "./resources/strategy.js";
+import { Backtests } from "./resources/backtest.js";
+import { Market } from "./resources/market.js";
 
 const DEFAULT_BASE_URL = "https://api.cryptohopper.com/v1";
 const DEFAULT_TIMEOUT_MS = 30_000;
@@ -27,7 +32,7 @@ export interface RequestOptions {
   signal?: AbortSignal;
   timeoutMs?: number;
   /** Query-string parameters. Values coerced to strings; undefined values skipped. */
-  query?: Record<string, string | number | boolean | undefined | null>;
+  query?: Record<string, string | number | boolean | undefined | null> | object;
   /** Override client-level maxRetries for this call. */
   maxRetries?: number;
 }
@@ -54,6 +59,11 @@ export class CryptohopperClient {
   private readonly userAgentSuffix?: string;
 
   readonly user: User;
+  readonly hoppers: Hoppers;
+  readonly exchange: Exchange;
+  readonly strategy: Strategies;
+  readonly backtest: Backtests;
+  readonly market: Market;
 
   constructor(opts: CryptohopperClientOptions) {
     if (!opts?.apiKey) {
@@ -68,6 +78,11 @@ export class CryptohopperClient {
     this.userAgentSuffix = opts.userAgent;
 
     this.user = new User(this);
+    this.hoppers = new Hoppers(this);
+    this.exchange = new Exchange(this);
+    this.strategy = new Strategies(this);
+    this.backtest = new Backtests(this);
+    this.market = new Market(this);
   }
 
   async __request<T = unknown>(
@@ -184,10 +199,7 @@ export class CryptohopperClient {
     return ok.data;
   }
 
-  private buildUrl(
-    path: string,
-    query?: Record<string, string | number | boolean | undefined | null>,
-  ): string {
+  private buildUrl(path: string, query?: object): string {
     const base = `${this.baseUrl}${path.startsWith("/") ? path : `/${path}`}`;
     if (!query) return base;
     const parts: string[] = [];

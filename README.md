@@ -2,7 +2,7 @@
 
 Official Node.js SDK for the [Cryptohopper](https://www.cryptohopper.com) API.
 
-> **Status: 0.1.0-alpha.1** — early scaffolding. Only `user.get()` is wired up. `hoppers`, `exchange`, `strategy`, `backtest`, and `market` resources land in subsequent alphas.
+> **Status: 0.1.0-alpha.1** — early access. Covers 6 core domains: `user`, `hoppers`, `exchange`, `strategy`, `backtest`, `market`. Additional domains (signals, arbitrage, tournaments, marketmaker, social, ai, template, subscription, platform) expand in subsequent alphas.
 
 ## Install
 
@@ -23,6 +23,54 @@ const ch = new CryptohopperClient({
 
 const me = await ch.user.get();
 console.log(me.email);
+```
+
+## Resources
+
+```ts
+// User
+await ch.user.get();
+
+// Hoppers (trading bots)
+await ch.hoppers.list({ exchange: "binance" });
+await ch.hoppers.get(42);
+await ch.hoppers.create({ name: "My Bot", exchange: "binance" });
+await ch.hoppers.update(42, { name: "Renamed" });
+await ch.hoppers.delete(42);
+await ch.hoppers.positions(42);
+await ch.hoppers.orders(42);
+await ch.hoppers.buy({ hopper_id: 42, market: "BTC/USDT", amount: 0.001 });
+await ch.hoppers.sell({ hopper_id: 42, market: "BTC/USDT", amount: 0.001 });
+await ch.hoppers.configGet(42);
+await ch.hoppers.configUpdate(42, { /* config fields */ });
+await ch.hoppers.panic(42);
+
+// Exchange (public — no auth required)
+await ch.exchange.ticker({ exchange: "binance", market: "BTC/USDT" });
+await ch.exchange.candles({ exchange: "binance", market: "BTC/USDT", timeframe: "1h" });
+await ch.exchange.orderbook({ exchange: "binance", market: "BTC/USDT" });
+await ch.exchange.markets("binance");
+await ch.exchange.exchanges();
+
+// Strategy
+await ch.strategy.list();
+await ch.strategy.get(5);
+await ch.strategy.create({ name: "My Strategy", ... });
+await ch.strategy.update(5, { name: "Renamed" });
+await ch.strategy.delete(5);
+
+// Backtest
+await ch.backtest.create({ hopper_id: 42, from_date: "2026-01-01", to_date: "2026-03-01" });
+await ch.backtest.get(1);
+await ch.backtest.list();
+await ch.backtest.cancel(1);
+await ch.backtest.limits();
+
+// Marketplace (public — no auth required)
+await ch.market.signals({ type: "buy" });
+await ch.market.signal(99);
+await ch.market.items({ type: "strategy" });
+await ch.market.homepage();
 ```
 
 ## Authentication
