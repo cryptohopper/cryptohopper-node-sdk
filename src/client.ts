@@ -171,68 +171,96 @@ export class CryptohopperClient {
       ? anySignal([options.signal, timeoutController.signal])
       : timeoutController.signal;
 
-    let res: Response;
+    // The timer must remain armed until the body has been fully consumed.
+    // fetch() resolves once headers arrive; a slow or stalled response body
+    // is read inside `await res.text()` and would otherwise hang
+    // indefinitely with no timeout protection. Clear the timer in `finally`.
     try {
-      res = await this.fetchImpl(url, {
-        method,
-        headers,
-        body: body === undefined ? undefined : JSON.stringify(body),
-        signal,
-      });
-    } catch (err) {
-      clearTimeout(timer);
-      const aborted = (err as { name?: string }).name === "AbortError";
-      if (aborted && options.signal?.aborted) {
+      let res: Response;
+      try {
+        res = await this.fetchImpl(url, {
+          method,
+          headers,
+          body: body === undefined ? undefined : JSON.stringify(body),
+          signal,
+        });
+      } catch (err) {
+        const aborted = (err as { name?: string }).name === "AbortError";
+        if (aborted && options.signal?.aborted) {
+          throw new CryptohopperError({
+            code: "NETWORK_ERROR",
+            message: "Request aborted",
+            status: 0,
+          });
+        }
         throw new CryptohopperError({
-          code: "NETWORK_ERROR",
-          message: "Request aborted",
+          code: aborted ? "TIMEOUT" : "NETWORK_ERROR",
+          message: aborted
+            ? `Request timed out after ${timeoutMs}ms`
+            : `Could not reach ${this.baseUrl} (${(err as Error).message})`,
           status: 0,
         });
       }
-      throw new CryptohopperError({
-        code: aborted ? "TIMEOUT" : "NETWORK_ERROR",
-        message: aborted
-          ? `Request timed out after ${timeoutMs}ms`
-          : `Could not reach ${this.baseUrl} (${(err as Error).message})`,
-        status: 0,
-      });
-    }
-    clearTimeout(timer);
 
-    const text = await res.text();
-    let parsed: unknown = null;
-    if (text.length > 0) {
+      let text: string;
       try {
-        parsed = JSON.parse(text);
-      } catch {
-        /* non-JSON body — parsed stays null */
+        text = await res.text();
+      } catch (err) {
+        const aborted = (err as { name?: string }).name === "AbortError";
+        if (aborted && options.signal?.aborted) {
+          throw new CryptohopperError({
+            code: "NETWORK_ERROR",
+            message: "Request aborted while reading response body",
+            status: 0,
+          });
+        }
+        throw new CryptohopperError({
+          code: aborted ? "TIMEOUT" : "NETWORK_ERROR",
+          message: aborted
+            ? `Response body read timed out after ${timeoutMs}ms`
+            : `Failed to read response body (${(err as Error).message})`,
+          status: 0,
+        });
       }
-    }
 
-    if (!res.ok) {
-      const body = parsed as ApiErrorBody | null;
-      const code = defaultCodeForStatus(res.status);
-      const message = body?.message ?? `Request failed (${res.status})`;
-      const serverCode =
-        body && typeof body.code === "number" && body.code > 0 ? body.code : undefined;
-      const ipAddress = body?.ip_address;
-      const retryAfter = res.headers.get("retry-after");
-      const retryAfterMs = retryAfter ? parseRetryAfter(retryAfter) : undefined;
-      throw new CryptohopperError({
-        code,
-        message,
-        status: res.status,
-        serverCode,
-        ipAddress,
-        retryAfterMs,
-      });
-    }
+      let parsed: unknown = null;
+      if (text.length > 0) {
+        try {
+          parsed = JSON.parse(text);
+        } catch {
+          /* non-JSON body — parsed stays null */
+        }
+      }
 
-    const ok = parsed as ApiOkBody<T> | null;
-    if (!ok || typeof ok !== "object" || !("data" in ok)) {
-      return parsed as T;
+      if (!res.ok) {
+        const errBody = parsed as ApiErrorBody | null;
+        const code = defaultCodeForStatus(res.status);
+        const message = errBody?.message ?? `Request failed (${res.status})`;
+        const serverCode =
+          errBody && typeof errBody.code === "number" && errBody.code > 0
+            ? errBody.code
+            : undefined;
+        const ipAddress = errBody?.ip_address;
+        const retryAfter = res.headers.get("retry-after");
+        const retryAfterMs = retryAfter ? parseRetryAfter(retryAfter) : undefined;
+        throw new CryptohopperError({
+          code,
+          message,
+          status: res.status,
+          serverCode,
+          ipAddress,
+          retryAfterMs,
+        });
+      }
+
+      const ok = parsed as ApiOkBody<T> | null;
+      if (!ok || typeof ok !== "object" || !("data" in ok)) {
+        return parsed as T;
+      }
+      return ok.data;
+    } finally {
+      clearTimeout(timer);
     }
-    return ok.data;
   }
 
   private buildUrl(path: string, query?: object): string {
