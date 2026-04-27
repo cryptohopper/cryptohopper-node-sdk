@@ -3,7 +3,16 @@
 All notable changes to `@cryptohopper/sdk` are documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## 0.4.0-alpha.1 — Unreleased
+## 0.4.0-alpha.2 — Unreleased
+
+### Fixed
+- **Critical: every authenticated request was rejected by the API gateway.** The transport sent `Authorization: Bearer <token>`, which the AWS API Gateway in front of `api.cryptohopper.com/v1/*` rejects (it routes `Authorization` to a SigV4 parser and returns `405 Missing Authentication Token`). Cryptohopper's Public API v1 uses a different header — `access-token: <token>` — confirmed by the official [API documentation](https://www.cryptohopper.com/api-documentation/how-the-api-works) and the legacy `cryptohopper-ios-sdk` / `cryptohopper-android-sdk` (which also send `access-token` for v1 calls). Switching the SDK to send `access-token` instead. The `Authorization` header is no longer set.
+- The `appKey` → `x-api-app-key` header is unchanged; that one was always correct.
+
+### Compatibility
+No public-API change. The fix is purely in the request-builder and is invisible to callers — `client.user.get()`, `client.hoppers.list()`, etc. all keep their existing signatures and behaviour. Only the wire-level header sent on each request changes.
+
+## 0.4.0-alpha.1 — 2026-04-25
 
 Adds four more API domains: `social`, `tournaments`, `webhooks`, `app`. This is the final A-wave — all 14 remaining public domains are now covered.
 
