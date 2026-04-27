@@ -53,7 +53,7 @@ await ch.hoppers.configGet(42);
 await ch.hoppers.configUpdate(42, { /* config fields */ });
 await ch.hoppers.panic(42);
 
-// Exchange (public — no auth required)
+// Exchange — market data (still requires a real token; the gateway has no anonymous routes)
 await ch.exchange.ticker({ exchange: "binance", market: "BTC/USDT" });
 await ch.exchange.candles({ exchange: "binance", market: "BTC/USDT", timeframe: "1h" });
 await ch.exchange.orderbook({ exchange: "binance", market: "BTC/USDT" });
@@ -74,7 +74,7 @@ await ch.backtest.list();
 await ch.backtest.cancel(1);
 await ch.backtest.limits();
 
-// Marketplace (public — no auth required)
+// Marketplace — same auth requirement as everything else
 await ch.market.signals({ type: "buy" });
 await ch.market.signal(99);
 await ch.market.items({ type: "strategy" });
