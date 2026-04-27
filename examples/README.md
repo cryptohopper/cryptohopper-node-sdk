@@ -1,6 +1,6 @@
 # Examples
 
-Runnable scripts that exercise the most common usage patterns of `@cryptohopper/sdk`. Each file is self-contained and reads its bearer token from `CRYPTOHOPPER_TOKEN` (except [`public-ticker.ts`](public-ticker.ts), which calls a public endpoint and needs no auth).
+Runnable scripts that exercise the most common usage patterns of `@cryptohopper/sdk`. Each file is self-contained and reads its bearer token from `CRYPTOHOPPER_TOKEN`. The API gateway requires authentication on every endpoint, including market-data routes, so all examples need a real token.
 
 ## Setup
 
@@ -16,7 +16,7 @@ export CRYPTOHOPPER_TOKEN=...      # 40-char OAuth bearer
 ## Run an example
 
 ```bash
-npx tsx public-ticker.ts                    # no auth required
+npx tsx ticker.ts                           # current BTC/USDT spot price on Binance
 npx tsx whoami.ts                           # prints the authenticated user
 npx tsx list-hoppers.ts                     # list every hopper on your account
 npx tsx error-handling.ts <bad-hopper-id>   # demonstrates the typed error surface
@@ -27,7 +27,7 @@ npx tsx start-backtest.ts <hopper-id>       # kick off a 30-day backtest
 
 | File | Demonstrates |
 |------|--------------|
-| [`public-ticker.ts`](public-ticker.ts) | Public endpoint (no token), single ticker fetch |
+| [`ticker.ts`](ticker.ts) | Single ticker fetch (current spot price) |
 | [`whoami.ts`](whoami.ts) | Minimal authenticated request |
 | [`list-hoppers.ts`](list-hoppers.ts) | Listing resource with optional filter, paginated table output |
 | [`error-handling.ts`](error-handling.ts) | `CryptohopperError` codes, status, retry-after parsing |
