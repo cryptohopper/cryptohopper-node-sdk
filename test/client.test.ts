@@ -17,7 +17,8 @@ describe("CryptohopperClient transport", () => {
     const req = mock.requests[0]!;
     expect(req.url).toBe("https://api.cryptohopper.com/v1/user/get");
     expect(req.method).toBe("GET");
-    expect(req.headers["authorization"]).toBe("Bearer ch_abc");
+    expect(req.headers["access-token"]).toBe("ch_abc");
+    expect(req.headers["authorization"]).toBeUndefined();
     expect(req.headers["user-agent"]).toBe(`cryptohopper-sdk/${CURRENT_VERSION}`);
     expect(req.headers["x-api-app-key"]).toBeUndefined();
   });

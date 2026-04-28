@@ -157,7 +157,10 @@ export class CryptohopperClient {
     const url = this.buildUrl(path, options.query);
     const ua = `cryptohopper-sdk/${CURRENT_VERSION}${this.userAgentSuffix ? ` ${this.userAgentSuffix}` : ""}`;
     const headers: Record<string, string> = {
-      Authorization: `Bearer ${this.apiKey}`,
+      // Cryptohopper Public API v1 uses `access-token: <token>`, not the
+      // OAuth2-conventional `Authorization: Bearer <token>`. The gateway in
+      // front of the API rejects Bearer with a SigV4 parse error.
+      "access-token": this.apiKey,
       "User-Agent": ua,
       Accept: "application/json",
     };
