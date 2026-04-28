@@ -33,6 +33,8 @@ const me = await ch.user.get();
 console.log(me.email);
 ```
 
+For runnable scripts you can clone and tinker with, see [`examples/`](examples/) — covers public ticker, whoami, hopper listing, error handling, and a 30-day backtest.
+
 ## Resources
 
 ```ts
